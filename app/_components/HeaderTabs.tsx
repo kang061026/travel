@@ -23,14 +23,19 @@ export default function HeaderTabs({
 
   return (
     <>
-      {/* 왼쪽 상단 햄버거 버튼 (전역 고정) */}
-      <div className="fixed top-3 left-3 z-40">
+      {/* 고정 햄버거(좌측 상단) - safe area 고려 */}
+      <div
+        className="fixed z-40"
+        style={{
+          top: `calc(env(safe-area-inset-top, 0px) + 10px)`,
+          left: `calc(env(safe-area-inset-left, 0px) + 12px)`
+        }}
+      >
         <button
           aria-label="탭 열기"
           onClick={() => setOpen(true)}
-          className="h-10 w-10 rounded-xl2 border border-ink-slate/20 bg-base-white shadow-soft hover:bg-graytone-cloud flex items-center justify-center"
+          className="h-11 w-11 rounded-xl2 border border-ink-slate/20 bg-base-white shadow-soft hover:bg-graytone-cloud flex items-center justify-center"
         >
-          {/* 햄버거 아이콘 (3줄) */}
           <span className="sr-only">메뉴</span>
           <div className="space-y-1.5">
             <span className="block h-0.5 w-5 bg-ink-deep rounded"></span>
@@ -43,13 +48,14 @@ export default function HeaderTabs({
       {/* 드로어 & 오버레이 */}
       {open && (
         <>
-          {/* 배경 오버레이 클릭 시 닫기 */}
           <div
             className="fixed inset-0 z-40 bg-black/30"
             onClick={() => setOpen(false)}
           />
-          {/* 사이드 드로어 */}
-          <aside className="fixed z-50 left-0 top-0 h-dvh w-72 max-w-[80vw] bg-base-white border-r border-ink-slate/10 shadow-soft">
+          <aside
+            className="fixed z-50 left-0 top-0 h-dvh w-72 max-w-[80vw] bg-base-white border-r border-ink-slate/10 shadow-soft"
+            style={{ paddingTop: 'env(safe-area-inset-top)' }}
+          >
             <div className="p-4 flex items-center justify-between border-b border-ink-slate/10">
               <div className="font-semibold">탭 이동</div>
               <button
@@ -60,7 +66,6 @@ export default function HeaderTabs({
                 닫기
               </button>
             </div>
-
             <nav className="p-2">
               <ul className="space-y-1">
                 {TAB_LABELS.map((t) => {

@@ -2,8 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base */
 html, body { background:#FFFFFF; color:#0A0A0A; }
-* { -webkit-tap-highlight-color: transparent; }
+* { -webkit-tap-highlight-color: transparent; min-width: 0; }
+body { overflow-x: hidden; }
+
+/* 텍스트 줄바꿈: 모바일에서 긴 단어/숫자도 안전하게 줄바꿈 */
+p, span, td, th, button, input {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* 테이블: 고정 레이아웃으로 셀 넘침 방지 */
+table { table-layout: fixed; }
+th, td { white-space: normal; }
 
 /* Buttons */
 .btn {
@@ -31,3 +43,9 @@ html, body { background:#FFFFFF; color:#0A0A0A; }
 .badge {
   @apply inline-flex items-center gap-1.5 rounded-full bg-graytone-fog text-ink-deep/80 text-xs px-2.5 py-1 border border-ink-slate/10;
 }
+/* 텍스트 줄바꿈: 모바일에서 긴 단어/숫자도 안전하게 줄바꿈 */
+p, span, td, th, button, input { word-break: break-word; overflow-wrap: anywhere; }
+
+/* 테이블: 고정 레이아웃으로 셀 넘침 방지 */
+table { table-layout: fixed; }
+th, td { white-space: normal; }
