@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { background:#FFFFFF; color:#0A0A0A; }
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Buttons */
+.btn {
+  @apply px-4 py-2.5 rounded-xl2 border text-sm font-medium transition-colors;
+}
+.btn-primary {
+  @apply bg-ink-deep text-base-white border-ink-deep hover:bg-ink-charcoal shadow-soft;
+}
+.btn-secondary {
+  @apply bg-graytone-cloud text-ink-deep border-graytone-cloud hover:bg-graytone-fog;
+}
+
+/* Input */
+.input {
+  @apply w-full px-4 py-3 rounded-xl2 border border-ink-slate/20 bg-base-white text-ink-deep
+         placeholder:text-graytone-mist focus:outline-none focus:ring-2 focus:ring-ink-deep/40;
+}
+
+/* Card */
+.card {
+  @apply rounded-xl2 border border-ink-slate/10 bg-base-white shadow-soft;
+}
+
+/* Badge */
+.badge {
+  @apply inline-flex items-center gap-1.5 rounded-full bg-graytone-fog text-ink-deep/80 text-xs px-2.5 py-1 border border-ink-slate/10;
+}
