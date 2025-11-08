@@ -11,7 +11,6 @@ export default function Wishlist({ tab }: { tab: Extract<TabKey, 'food' | 'place
   const [value, setValue] = useState('')
   const label = tab === 'food' ? '먹고싶은 것' : '가고싶은 곳'
 
-  // 초기 로드 + 실시간 구독
   useEffect(() => {
     let mounted = true
     const load = async () => {
@@ -32,10 +31,8 @@ export default function Wishlist({ tab }: { tab: Extract<TabKey, 'food' | 'place
         (payload) => {
           setItems((cur) => {
             if (payload.eventType === 'INSERT') return [...cur, payload.new as W]
-            if (payload.eventType === 'UPDATE')
-              return cur.map((x) => (x.id === (payload.new as W).id ? (payload.new as W) : x))
-            if (payload.eventType === 'DELETE')
-              return cur.filter((x) => x.id !== (payload.old as W).id)
+            if (payload.eventType === 'UPDATE') return cur.map(x => x.id === (payload.new as W).id ? (payload.new as W) : x)
+            if (payload.eventType === 'DELETE') return cur.filter(x => x.id !== (payload.old as W).id)
             return cur
           })
         }
@@ -48,19 +45,12 @@ export default function Wishlist({ tab }: { tab: Extract<TabKey, 'food' | 'place
     }
   }, [tab])
 
-  // 추가
   const add = async () => {
     if (!value.trim()) return
     await supabase.from('wishlist').insert({ type: tab, content: value.trim() })
     setValue('')
   }
 
-  // 삭제
-  const remove = async (id: string) => {
-    await supabase.from('wishlist').delete().eq('id', id)
-  }
-
-  // 엔터로 추가
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -70,15 +60,20 @@ export default function Wishlist({ tab }: { tab: Extract<TabKey, 'food' | 'place
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
+      {/* 모바일: 세로 배치 → 버튼이 가로로 짤리지 않음
+          sm 이상: 가로 배치 */}
+      <div className="flex flex-col sm:flex-row gap-2 min-w-0">
         <input
-          className="input"
+          className="input flex-1 min-w-0"
           placeholder={`${label} 입력`}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e)=>setValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={add} className="btn btn-primary whitespace-nowrap">
+        <button
+          onClick={add}
+          className="btn btn-primary w-full sm:w-auto shrink-0"
+        >
           {label} 추가
         </button>
       </div>
@@ -87,14 +82,12 @@ export default function Wishlist({ tab }: { tab: Extract<TabKey, 'food' | 'place
         {items.map((w) => (
           <li key={w.id} className="card p-4 flex items-center justify-between">
             <span className="truncate">{w.content}</span>
-            <button onClick={() => remove(w.id)} className="btn btn-secondary">
+            <button onClick={() => supabase.from('wishlist').delete().eq('id', w.id)} className="btn btn-secondary">
               삭제
             </button>
           </li>
         ))}
-        {items.length === 0 && (
-          <li className="text-sm text-graytone-ash">등록된 항목이 없습니다.</li>
-        )}
+        {items.length === 0 && <li className="text-sm text-graytone-ash">등록된 항목이 없습니다.</li>}
       </ul>
     </div>
   )
