@@ -25,12 +25,10 @@ export default function Page() {
     const fromStorage = localStorage.getItem('tripplanner_tab')
     if (isValidTab(fromStorage)) {
       setTab(fromStorage)
-      // URL도 정리
       const p = new URLSearchParams(window.location.search)
       p.set('tab', fromStorage)
       history.replaceState(null, '', `?${p.toString()}`)
     } else {
-      // 기본값을 URL에 기록
       const p = new URLSearchParams(window.location.search)
       p.set('tab', DEFAULT_TAB)
       history.replaceState(null, '', `?${p.toString()}`)
@@ -47,16 +45,8 @@ export default function Page() {
     localStorage.setItem('tripplanner_tab', k)
   }
 
-  const isScheduleTab = useMemo(
-    () =>
-      tab === 'day1' ||
-      tab === 'day2' ||
-      tab === 'day4' ||
-      tab === 'personal_arum' ||
-      tab === 'personal_seunghyun' ||
-      tab === 'personal_choi',
-    [tab]
-  )
+  // 일정 탭 여부: food/place 제외 모두 일정 탭으로 간주 (새 탭 추가해도 자동 반영)
+  const isScheduleTab = useMemo(() => tab !== 'food' && tab !== 'place', [tab])
 
   return (
     <Shell>
